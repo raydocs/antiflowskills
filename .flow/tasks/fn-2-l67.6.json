@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-01-22T14:38:08.190880Z",
+  "depends_on": [],
+  "epic": "fn-2-l67",
+  "id": "fn-2-l67.6",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-2-l67.6.md",
+  "status": "todo",
+  "title": "RepoPrompt \u96c6\u6210\u9a8c\u8bc1",
+  "updated_at": "2026-01-22T14:38:08.191059Z"
+}

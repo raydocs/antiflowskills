@@ -1,0 +1,14 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-01-22T14:38:08.306229Z",
+  "depends_on": [],
+  "epic": "fn-2-l67",
+  "id": "fn-2-l67.7",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-2-l67.7.md",
+  "status": "todo",
+  "title": "\u66f4\u65b0\u7528\u6237\u6587\u6863\u548c\u521b\u5efa Factory \u4f7f\u7528\u6307\u5357",
+  "updated_at": "2026-01-22T14:38:08.306426Z"
+}

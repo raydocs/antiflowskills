@@ -1,0 +1,16 @@
+{
+  "assignee": null,
+  "claim_note": "",
+  "claimed_at": null,
+  "created_at": "2026-01-22T13:50:47.405982Z",
+  "depends_on": [
+    "fn-1-gs3.1"
+  ],
+  "epic": "fn-1-gs3",
+  "id": "fn-1-gs3.2",
+  "priority": null,
+  "spec_path": ".flow/tasks/fn-1-gs3.2.md",
+  "status": "todo",
+  "title": "\u521b\u5efa\u57fa\u7840\u76ee\u5f55\u7ed3\u6784\u548c\u5171\u4eab\u914d\u7f6e",
+  "updated_at": "2026-01-22T13:58:43.838684Z"
+}

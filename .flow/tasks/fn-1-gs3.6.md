@@ -1,0 +1,82 @@
+# fn-1-gs3.6 RepoPrompt 集成验证和路径适配
+
+## Description
+
+验证 RepoPrompt 在 Antigravity 环境中的集成，rp-cli 为主要方式，MCP 为可选增强。
+
+**Size:** S
+**Files:** 可能需要修改已移植的技能文件
+
+## Approach
+
+1. 验证 rp-cli 在 Antigravity 环境中可调用
+2. 测试 context builder 并验证产物
+3. 测试 chat-send 真实调用（或 dry-run 等效）
+4. 如果 Antigravity 支持 MCP，测试 MCP 集成（可选）
+5. 测试 worktree 场景
+6. 修复发现的兼容性问题
+
+## Integration Strategy
+
+**主要方式**: rp-cli 直接调用
+- 不依赖 MCP
+- 所有调用使用 `--repo-root "$REPO_ROOT"` 明确指定 repo
+- 更可靠，跨 worktree 一致
+
+**可选增强**: MCP
+- 如果 Antigravity 支持，可启用
+- 否则跳过，不阻塞
+
+## Platform Support
+
+**rp-cli 仅 macOS 可用**。非 macOS 平台降级策略:
+- 跳过 rp-cli 集成
+- 技能输出提示信息: "RepoPrompt 仅支持 macOS，请手动执行..."
+
+## Key context
+
+- RepoPrompt 需要 rp-cli 安装: `brew install --cask repoprompt`
+- 需要 RepoPrompt 1.6.0+
+- macOS only，非 macOS 需降级处理
+
+## Acceptance
+
+- [ ] rp-cli 命令可执行:
+  ```bash
+  rp-cli --version  # 返回版本号，退出码 0
+  ```
+- [ ] context builder 产物验证:
+  ```bash
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+  rp-cli --repo-root "$REPO_ROOT" -e 'builder "test prompt"'
+  # 成功标准: 退出码 0，stdout 包含文件列表或 "selected" 关键词
+  ```
+- [ ] chat-send 功能真实验证:
+  ```bash
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+  # 执行一次真实调用（可使用临时 window/tab）
+  "$REPO_ROOT/.flow/bin/flowctl" rp chat-send --window <W> --tab <T> --message "test"
+  # 成功标准: 退出码 0，输出包含响应内容或 request id
+  ```
+  **替代方案**: 若无法真实调用，记录原因并验证 `flowctl rp` 子命令可解析参数
+- [ ] worktree 场景验证:
+  ```bash
+  git worktree add /tmp/test-worktree HEAD
+  cd /tmp/test-worktree
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+  rp-cli --repo-root "$REPO_ROOT" -e 'builder "test"'
+  # 成功标准: 可执行，输出正常
+  git worktree remove /tmp/test-worktree
+  ```
+- [ ] MCP 集成状态已记录（支持/不支持/未测试）
+- [ ] 非 macOS 降级策略已记录，包含用户提示文案
+
+## Done summary
+
+TBD
+
+## Evidence
+
+- Commits:
+- Tests:
+- PRs:
