@@ -103,7 +103,8 @@ ls "$REPO_ROOT/.factory/skills/flow-next/SKILL.md"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 # Check skill count
-echo "Skills: $(ls -d "$REPO_ROOT/.factory/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')"
+SKILL_COUNT=$(ls -d "$REPO_ROOT/.factory/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')
+printf 'Skills: %s\n' "$SKILL_COUNT"
 
 # Check flowctl
 "$REPO_ROOT/.flow/bin/flowctl" --version 2>/dev/null && echo "flowctl: OK" || echo "flowctl: ERROR"

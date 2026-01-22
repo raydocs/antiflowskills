@@ -3,16 +3,16 @@
 
 This project uses Flow-Next for task tracking. Use `.flow/bin/flowctl` instead of markdown TODOs or TodoWrite.
 
-**Quick commands:**
+**Quick commands:** (IDs use `fn-N-xxx` format, e.g., `fn-1-abc`; legacy `fn-N` also supported)
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-"$REPO_ROOT/.flow/bin/flowctl" list                # List all epics + tasks
-"$REPO_ROOT/.flow/bin/flowctl" epics               # List all epics
-"$REPO_ROOT/.flow/bin/flowctl" tasks --epic fn-N   # List tasks for epic
-"$REPO_ROOT/.flow/bin/flowctl" ready --epic fn-N   # What's ready
-"$REPO_ROOT/.flow/bin/flowctl" show fn-N.M         # View task
-"$REPO_ROOT/.flow/bin/flowctl" start fn-N.M        # Claim task
-"$REPO_ROOT/.flow/bin/flowctl" done fn-N.M --summary-file s.md --evidence-json e.json
+"$REPO_ROOT/.flow/bin/flowctl" list                    # List all epics + tasks
+"$REPO_ROOT/.flow/bin/flowctl" epics                   # List all epics
+"$REPO_ROOT/.flow/bin/flowctl" tasks --epic fn-1-abc   # List tasks for epic
+"$REPO_ROOT/.flow/bin/flowctl" ready --epic fn-1-abc   # What's ready
+"$REPO_ROOT/.flow/bin/flowctl" show fn-1-abc.2         # View task
+"$REPO_ROOT/.flow/bin/flowctl" start fn-1-abc.2        # Claim task
+"$REPO_ROOT/.flow/bin/flowctl" done fn-1-abc.2 --summary-file s.md --evidence-json e.json
 ```
 
 **Rules:**

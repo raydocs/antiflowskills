@@ -95,6 +95,8 @@ $FLOWCTL migrate-state --clean   # Migrate + remove runtime from tracked files
 
 Migration is optional - existing repos work without changes.
 
+**Legacy runtime state:** Older repos may have runtime state in `.flow/state/` (tracked by git). Use `migrate-state --clean` to move it to `.git/flow-state/` and remove the tracked files.
+
 ### Worktree Usage
 
 Git worktrees allow parallel work on different branches. Flow-Next state is shared across worktrees via `.git/flow-state/`:
