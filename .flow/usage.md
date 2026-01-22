@@ -20,14 +20,17 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 ```
 .flow/
-├── bin/flowctl         # CLI (this install)
-├── epics/fn-N-xxx.json # Epic metadata
-├── specs/fn-N-xxx.md   # Epic specifications
+├── bin/flowctl           # CLI (this install)
+├── epics/fn-N-xxx.json   # Epic metadata
+├── specs/fn-N-xxx.md     # Epic specifications
 ├── tasks/fn-N-xxx.M.json # Task metadata
 ├── tasks/fn-N-xxx.M.md   # Task specifications
-├── memory/             # Context memory
-└── meta.json           # Project metadata
+├── memory/               # Context memory
+├── state/                # (Legacy) runtime state - migrate to .git/flow-state/
+└── meta.json             # Project metadata
 ```
+
+**Note:** If you see `.flow/state/`, it contains legacy runtime state. Use `migrate-state --clean` to move it to `.git/flow-state/`.
 
 ## IDs
 

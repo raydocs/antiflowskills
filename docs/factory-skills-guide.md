@@ -44,7 +44,7 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 | `flow-plan-review` | Carmack-level plan review | "review the plan", "check the epic spec" |
 | `flow-impl-review` | Carmack-level code review | "review the implementation", "check the code changes" |
 
-**Note:** Review skills require rp-cli (macOS only). See [Platform Limitations](#platform-limitations).
+**Note:** Review skills require rp-cli for full functionality (macOS only). Non-macOS users can perform manual review. See [Platform Limitations](#platform-limitations).
 
 ### Scout Skills (Research Subagents)
 
@@ -102,8 +102,8 @@ ls "$REPO_ROOT/.factory/skills/flow-next/SKILL.md"
 ```bash
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-# Check skill count
-SKILL_COUNT=$(ls -d "$REPO_ROOT/.factory/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')
+# Check skill count (works in bash and zsh, even if empty/missing)
+SKILL_COUNT=$(find "$REPO_ROOT/.factory/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
 printf 'Skills: %s\n' "$SKILL_COUNT"
 
 # Check flowctl
