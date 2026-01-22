@@ -4,9 +4,12 @@ Task tracking for AI agents. All state lives in `.flow/`.
 
 ## CLI
 
+Use dynamic repo root for commands that may run from subdirectories or worktrees:
+
 ```bash
-.flow/bin/flowctl --help              # All commands
-.flow/bin/flowctl <cmd> --help        # Command help
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+"$REPO_ROOT/.flow/bin/flowctl" --help              # All commands
+"$REPO_ROOT/.flow/bin/flowctl" <cmd> --help        # Command help
 ```
 
 ## File Structure
@@ -30,40 +33,44 @@ Task tracking for AI agents. All state lives in `.flow/`.
 ## Common Commands
 
 ```bash
+# Setup (run once per shell session)
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+FLOWCTL="$REPO_ROOT/.flow/bin/flowctl"
+
 # List
-.flow/bin/flowctl list               # All epics + tasks grouped
-.flow/bin/flowctl epics              # All epics with progress
-.flow/bin/flowctl tasks              # All tasks
-.flow/bin/flowctl tasks --epic fn-1  # Tasks for epic
-.flow/bin/flowctl tasks --status todo # Filter by status
+$FLOWCTL list               # All epics + tasks grouped
+$FLOWCTL epics              # All epics with progress
+$FLOWCTL tasks              # All tasks
+$FLOWCTL tasks --epic fn-1  # Tasks for epic
+$FLOWCTL tasks --status todo # Filter by status
 
 # View
-.flow/bin/flowctl show fn-1          # Epic with all tasks
-.flow/bin/flowctl show fn-1.2        # Single task
-.flow/bin/flowctl cat fn-1           # Epic spec (markdown)
-.flow/bin/flowctl cat fn-1.2         # Task spec (markdown)
+$FLOWCTL show fn-1          # Epic with all tasks
+$FLOWCTL show fn-1.2        # Single task
+$FLOWCTL cat fn-1           # Epic spec (markdown)
+$FLOWCTL cat fn-1.2         # Task spec (markdown)
 
 # Status
-.flow/bin/flowctl ready --epic fn-1  # What's ready to work on
-.flow/bin/flowctl validate --all     # Check structure
-.flow/bin/flowctl state-path         # Show state directory (for worktrees)
+$FLOWCTL ready --epic fn-1  # What's ready to work on
+$FLOWCTL validate --all     # Check structure
+$FLOWCTL state-path         # Show state directory (for worktrees)
 
 # Create
-.flow/bin/flowctl epic create --title "..."
-.flow/bin/flowctl task create --epic fn-1 --title "..."
+$FLOWCTL epic create --title "..."
+$FLOWCTL task create --epic fn-1 --title "..."
 
 # Work
-.flow/bin/flowctl start fn-1.2       # Claim task
-.flow/bin/flowctl done fn-1.2 --summary-file s.md --evidence-json e.json
+$FLOWCTL start fn-1.2       # Claim task
+$FLOWCTL done fn-1.2 --summary-file s.md --evidence-json e.json
 ```
 
 ## Workflow
 
-1. `.flow/bin/flowctl epics` - list all epics
-2. `.flow/bin/flowctl ready --epic fn-N` - find available tasks
-3. `.flow/bin/flowctl start fn-N.M` - claim task
+1. `$FLOWCTL epics` - list all epics
+2. `$FLOWCTL ready --epic fn-N` - find available tasks
+3. `$FLOWCTL start fn-N.M` - claim task
 4. Implement the task
-5. `.flow/bin/flowctl done fn-N.M --summary-file ... --evidence-json ...` - complete
+5. `$FLOWCTL done fn-N.M --summary-file ... --evidence-json ...` - complete
 
 ## Evidence JSON Format
 
@@ -76,14 +83,50 @@ Task tracking for AI agents. All state lives in `.flow/`.
 Runtime state (status, assignee, etc.) is stored in `.git/flow-state/`, shared across worktrees:
 
 ```bash
-.flow/bin/flowctl state-path              # Show state directory
-.flow/bin/flowctl migrate-state           # Migrate existing repo
-.flow/bin/flowctl migrate-state --clean   # Migrate + remove runtime from tracked files
+$FLOWCTL state-path              # Show state directory
+$FLOWCTL migrate-state           # Migrate existing repo
+$FLOWCTL migrate-state --clean   # Migrate + remove runtime from tracked files
 ```
 
-Migration is optional — existing repos work without changes.
+Migration is optional - existing repos work without changes.
+
+### Worktree Usage
+
+Git worktrees allow parallel work on different branches. Flow-Next state is shared across worktrees via `.git/flow-state/`:
+
+```bash
+# Create worktree for a feature branch
+git worktree add ../my-feature-worktree feature-branch
+
+# In the worktree, flowctl works the same way
+cd ../my-feature-worktree
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+"$REPO_ROOT/.flow/bin/flowctl" list
+
+# State is shared - task claimed in main worktree is visible here
+```
+
+**Key points:**
+- All worktrees share the same `.git/flow-state/` directory
+- Task assignments and status are visible across all worktrees
+- Spec files (`.flow/`) are part of the repo and follow normal git branching
+
+## Factory/Droid Skills
+
+Factory/Droid skills are located in `.factory/skills/`. See `docs/factory-skills-guide.md` for complete usage.
+
+**Key differences from Claude Code:**
+- Skills are model-invoked (semantic triggering) not slash commands
+- Ralph autonomous mode is not available (requires hooks system)
+- Hooks system is not supported
+
+**RepoPrompt (rp-cli) limitation:**
+- rp-cli is macOS only
+- Non-macOS users: Use `repo-scout` for codebase exploration
+- Review skills (`flow-impl-review`, `flow-plan-review`) require rp-cli or manual review
 
 ## More Info
 
 - Human docs: https://github.com/gmickel/gmickel-claude-marketplace/blob/main/plugins/flow-next/docs/flowctl.md
-- CLI reference: `.flow/bin/flowctl --help`
+- CLI reference: `$FLOWCTL --help`
+- Factory skills guide: `docs/factory-skills-guide.md`
