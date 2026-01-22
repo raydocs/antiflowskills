@@ -109,7 +109,7 @@ echo "Skills: $(ls -d "$REPO_ROOT/.factory/skills/"*/ 2>/dev/null | wc -l | tr -
 "$REPO_ROOT/.flow/bin/flowctl" --version 2>/dev/null && echo "flowctl: OK" || echo "flowctl: ERROR"
 
 # Check rp-cli (macOS only)
-if [[ "$(uname)" == "Darwin" ]]; then
+if [ "$(uname)" = "Darwin" ]; then
   rp-cli --version 2>/dev/null && echo "rp-cli: OK" || echo "rp-cli: not installed"
 else
   echo "rp-cli: not available (non-macOS)"
@@ -124,15 +124,16 @@ RepoPrompt's `rp-cli` is only available on macOS. This affects:
 
 | Feature | macOS | Non-macOS |
 |---------|-------|-----------|
-| `context-scout` | Full functionality | Degrades to `repo-scout` |
+| `context-scout` | Full functionality | Degrades to `repo-scout` (manual grep/find exploration) |
 | `flow-impl-review` | Full functionality | Manual review required |
 | `flow-plan-review` | Full functionality | Manual review required |
 
 **Non-macOS Workarounds:**
 
-1. **For codebase exploration:** Use `repo-scout` instead of `context-scout`
-2. **For code review:** Perform manual review or use external tools
-3. **Suggested message:** "rp-cli is macOS only. Use repo-scout for codebase exploration, or review code manually."
+1. **For codebase exploration:** Use `repo-scout` instead of `context-scout`. This provides ripgrep-based exploration instead of RepoPrompt context packaging.
+2. **For code review:** Perform manual review or use external tools.
+3. **To skip review:** Pass `--review=none` to skill invocation (e.g., in `flow-work` or `flow-impl-review` setup questions).
+4. **Suggested message:** "rp-cli is macOS only. Use repo-scout for codebase exploration, or review code manually."
 
 ### Hooks System (Not Available)
 
@@ -208,7 +209,8 @@ ls -la "$REPO_ROOT/.flow/bin/flowctl"
 **Cause:** rp-cli is macOS only.
 
 **Fix:**
-- Use `--review=none` flag to skip external review
+- Use `--review=none` flag when invoking review skills (`flow-impl-review`, `flow-plan-review`) to skip external review
+- When using `flow-work`, answer "none" to the review setup question
 - Perform manual code review
 - Or run review from a macOS machine with rp-cli installed
 

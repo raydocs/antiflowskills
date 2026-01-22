@@ -1,6 +1,10 @@
 # Flow-Next Usage Guide
 
-Task tracking for AI agents. All state lives in `.flow/`.
+Task tracking for AI agents.
+
+**State locations:**
+- **Spec state** (versioned): Epic/task specs in `.flow/` - tracked by git
+- **Runtime state** (unversioned): Status, assignee in `.git/flow-state/` - shared across worktrees
 
 ## CLI
 
@@ -38,39 +42,40 @@ REPO_ROOT="$(git rev-parse --show-toplevel)"
 FLOWCTL="$REPO_ROOT/.flow/bin/flowctl"
 
 # List
-$FLOWCTL list               # All epics + tasks grouped
-$FLOWCTL epics              # All epics with progress
-$FLOWCTL tasks              # All tasks
-$FLOWCTL tasks --epic fn-1  # Tasks for epic
-$FLOWCTL tasks --status todo # Filter by status
+$FLOWCTL list                    # All epics + tasks grouped
+$FLOWCTL epics                   # All epics with progress
+$FLOWCTL tasks                   # All tasks
+$FLOWCTL tasks --epic fn-1-abc   # Tasks for epic (new ID format)
+$FLOWCTL tasks --epic fn-1       # Tasks for epic (legacy format)
+$FLOWCTL tasks --status todo     # Filter by status
 
 # View
-$FLOWCTL show fn-1          # Epic with all tasks
-$FLOWCTL show fn-1.2        # Single task
-$FLOWCTL cat fn-1           # Epic spec (markdown)
-$FLOWCTL cat fn-1.2         # Task spec (markdown)
+$FLOWCTL show fn-1-abc           # Epic with all tasks
+$FLOWCTL show fn-1-abc.2         # Single task
+$FLOWCTL cat fn-1-abc            # Epic spec (markdown)
+$FLOWCTL cat fn-1-abc.2          # Task spec (markdown)
 
 # Status
-$FLOWCTL ready --epic fn-1  # What's ready to work on
-$FLOWCTL validate --all     # Check structure
-$FLOWCTL state-path         # Show state directory (for worktrees)
+$FLOWCTL ready --epic fn-1-abc   # What's ready to work on
+$FLOWCTL validate --all          # Check structure
+$FLOWCTL state-path              # Show state directory (for worktrees)
 
 # Create
 $FLOWCTL epic create --title "..."
-$FLOWCTL task create --epic fn-1 --title "..."
+$FLOWCTL task create --epic fn-1-abc --title "..."
 
 # Work
-$FLOWCTL start fn-1.2       # Claim task
-$FLOWCTL done fn-1.2 --summary-file s.md --evidence-json e.json
+$FLOWCTL start fn-1-abc.2        # Claim task
+$FLOWCTL done fn-1-abc.2 --summary-file s.md --evidence-json e.json
 ```
 
 ## Workflow
 
 1. `$FLOWCTL epics` - list all epics
-2. `$FLOWCTL ready --epic fn-N` - find available tasks
-3. `$FLOWCTL start fn-N.M` - claim task
+2. `$FLOWCTL ready --epic fn-1-abc` - find available tasks
+3. `$FLOWCTL start fn-1-abc.2` - claim task
 4. Implement the task
-5. `$FLOWCTL done fn-N.M --summary-file ... --evidence-json ...` - complete
+5. `$FLOWCTL done fn-1-abc.2 --summary-file ... --evidence-json ...` - complete
 
 ## Evidence JSON Format
 
